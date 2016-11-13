@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Error recovery - Hoplon Tutorial</title><link href="https://cdnjs.cloudflare.com/ajax/libs/spectre.css/0.1.24/spectre.min.css" rel="stylesheet" type="text/css"><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/github.min.css" rel="stylesheet" type="text/css"><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous"><link href="app.css" rel="stylesheet"></head><body><header class="navbar" style="background-color: rgb(239, 239, 239);"><section class="navbar-section"><a shape="rect" class="navbar-brand" href="/hoplon-tutorial">Hoplon Tutorial</a></section><section class="navbar-section"><a shape="rect" class="btn btn-link" href="contributing.html">Contributing</a><a shape="rect" class="btn btn-link" href="help.html">Help</a></section></header><div class="container grid-960"><div class="columns"><div class="column col-xs-12"><h1>Error recovery (WIP)</h1><h2>Understanding ClojureScript errors</h2><h3>Generating a Hoplon project</h3><p>Generate a new Hoplon project. Run the following command on a terminal:</p><pre class="bash hljs">boot <span class="hljs-operator">-d</span> seancorfield/boot-new new -t hoplon -n error-recovery</pre><h3>Running the project in development mode</h3><p>Change your directory to the project:</p><pre class="bash hljs"><span class="hljs-built_in">cd</span> error-recovery</pre><p>And run:</p><pre class="bash hljs">boot dev</pre><p>After the code is compiled open your browser and go to <a shape="rect" href="http://localhost:8000">http://localhost:8000</a>. You should see "Hello Hoplon!" in blue.</p><figure><img class="img-responsive" src="images/hello-hoplon.png" alt="Screenshot with \"Hello Hoplon\" header"><figcaption>Screenshot with "Hello Hoplon" header</figcaption></figure><h3>Making mistakes on index.cljs.hl file</h3><p>Let's make some mistake Open the file <code>src/index.cljs.hl</code> inside the project directory, in your favorite editor. You should see the code below:</p><pre class="clojure hljs"><span class="hljs-list">(<span class="hljs-keyword">page</span><span class="hljs-string">"index.html"</span>)</span>
+
+<span class="hljs-list">(<span class="hljs-keyword">html</span><span class="hljs-list">(<span class="hljs-keyword">head</span><span class="hljs-list">(<span class="hljs-keyword">link</span><span class="hljs-attribute">:href</span><span class="hljs-string">"app.css"</span><span class="hljs-attribute">:rel</span><span class="hljs-string">"stylesheet"</span><span class="hljs-attribute">:type</span><span class="hljs-string">"text/css"</span>)</span>)</span><span class="hljs-list">(<span class="hljs-keyword">body</span><span class="hljs-list">(<span class="hljs-keyword">h1</span><span class="hljs-string">"Hello, Hoplon!"</span>)</span>)</span>)</span></pre><p>In ClojureScript you will get errros if you don't close your forms. Remove one of the parentheses in the end of the <code>(h1 "Hello, Hoplon!")))</code></p><pre class="clojure hljs"><span class="hljs-list">(<span class="hljs-keyword">page</span><span class="hljs-string">"index.html"</span>)</span>
+
+<span class="hljs-list">(<span class="hljs-keyword">html</span><span class="hljs-list">(<span class="hljs-keyword">head</span><span class="hljs-list">(<span class="hljs-keyword">link</span><span class="hljs-attribute">:href</span><span class="hljs-string">"app.css"</span><span class="hljs-attribute">:rel</span><span class="hljs-string">"stylesheet"</span><span class="hljs-attribute">:type</span><span class="hljs-string">"text/css"</span>)</span>)</span><span class="hljs-list">(<span class="hljs-keyword">body</span><span class="hljs-list">(<span class="hljs-keyword">h1</span><span class="hljs-string">"Hello, Hoplon!"</span>)</span>)</span></span></pre><p>When you save the file you will get the following message on the terminal running <code>boot dev</code>.</p><pre class="bash hljs">Writing HTML files...
+• index.html
+Adding :require adzerk.boot-reload.init3509 to index.html.cljs.edn...
+Compiling ClojureScript...
+• index.html.js
+adzerk.boot_cljs.util.proxy<span class="hljs-variable">$clojure</span>.lang.ExceptionInfo<span class="hljs-variable">$ff19274a</span>: ERROR: EOF <span class="hljs-keyword">while</span> reading, starting at line <span class="hljs-number">3</span> and column <span class="hljs-number">1</span> at file hoplon/app_pages/_index_DOT_html.cljs, line <span class="hljs-number">9</span>, column <span class="hljs-number">1</span>
+
+    data: {:<span class="hljs-built_in">type</span> :reader-exception,
+           :line <span class="hljs-number">9</span>,
+           :column <span class="hljs-number">1</span>,
+           :file <span class="hljs-string">"hoplon/app_pages/_index_DOT_html.cljs"</span>,
+           :from :boot-cljs}
+adzerk.boot_cljs.util.proxy<span class="hljs-variable">$clojure</span>.lang.ExceptionInfo<span class="hljs-variable">$ff19274a</span>: EOF <span class="hljs-keyword">while</span> reading, starting at line <span class="hljs-number">3</span> and column <span class="hljs-number">1</span>
+    data: {:<span class="hljs-built_in">type</span> :reader-exception,
+           :line <span class="hljs-number">9</span>,
+           :column <span class="hljs-number">1</span>,
+           :file
+           <span class="hljs-string">"/home/y/.dotfiles/dotfiles/boot/cache/tmp/home/y/repos/hoplon/hoplon-project/lq8/6qp7pj/hoplon/app_pages/_index_DOT_html.cljs"</span>}
+                                      clojure.core/ex-info/invokeStatic          core.clj: <span class="hljs-number">4617</span>
+                                                   clojure.core/ex-info          core.clj: <span class="hljs-number">4617</span>
+            clojure.tools.reader.reader-types/reader-error/invokeStatic  reader_types.clj:  <span class="hljs-number">389</span>
+                         clojure.tools.reader.reader-types/reader-error  reader_types.clj:  <span class="hljs-number">385</span>
+                                                                    ...
+                       clojure.tools.reader/<span class="hljs-built_in">read</span>-delimited/invokeStatic        reader.clj:  <span class="hljs-number">201</span>
+                                    clojure.tools.reader/<span class="hljs-built_in">read</span>-delimited        reader.clj:  <span class="hljs-number">190</span>
+                            clojure.tools.reader/<span class="hljs-built_in">read</span>-list/invokeStatic        reader.clj:  <span class="hljs-number">210</span>
+                                         clojure.tools.reader/<span class="hljs-built_in">read</span>-list        reader.clj:  <span class="hljs-number">206</span>
+                                clojure.tools.reader/<span class="hljs-built_in">read</span>*/invokeStatic        reader.clj:  <span class="hljs-number">916</span>
+                                             clojure.tools.reader/<span class="hljs-built_in">read</span>*        reader.clj:  <span class="hljs-number">897</span>
+                                 clojure.tools.reader/<span class="hljs-built_in">read</span>/invokeStatic        reader.clj:  <span class="hljs-number">965</span>
+                                              clojure.tools.reader/<span class="hljs-built_in">read</span>        reader.clj:  <span class="hljs-number">942</span>
+cljs.analyzer<span class="hljs-variable">$forms_seq_STAR_</span><span class="hljs-variable">$forms_seq___2315</span><span class="hljs-variable">$fn__2316</span><span class="hljs-variable">$fn__2317</span>.invoke     analyzer.cljc: <span class="hljs-number">3112</span>
+         cljs.analyzer<span class="hljs-variable">$forms_seq_STAR_</span><span class="hljs-variable">$forms_seq___2315</span><span class="hljs-variable">$fn__2316</span>.invoke     analyzer.cljc: <span class="hljs-number">3105</span>
+                                                                    ...
+                                          clojure.core/seq/invokeStatic          core.clj:  <span class="hljs-number">137</span>
+                                                       clojure.core/seq          core.clj:  <span class="hljs-number">137</span>
+                                 cljs.compiler<span class="hljs-variable">$emit_source</span>.invokeStatic     compiler.cljc: <span class="hljs-number">1255</span>
+                                       cljs.compiler<span class="hljs-variable">$emit_source</span>.invoke     compiler.cljc: <span class="hljs-number">1237</span>
+                       cljs.compiler<span class="hljs-variable">$compile_file_STAR_</span><span class="hljs-variable">$fn__3623</span>.invoke     compiler.cljc: <span class="hljs-number">1328</span>
+                              cljs.compiler<span class="hljs-variable">$with_core_cljs</span>.invokeStatic     compiler.cljc: <span class="hljs-number">1159</span>
+                                    cljs.compiler<span class="hljs-variable">$with_core_cljs</span>.invoke     compiler.cljc: <span class="hljs-number">1150</span>
+                          cljs.compiler<span class="hljs-variable">$compile_file_STAR_</span>.invokeStatic     compiler.cljc: <span class="hljs-number">1317</span>
+                                cljs.compiler<span class="hljs-variable">$compile_file_STAR_</span>.invoke     compiler.cljc: <span class="hljs-number">1313</span>
+                             cljs.compiler<span class="hljs-variable">$compile_file</span><span class="hljs-variable">$fn__3646</span>.invoke     compiler.cljc: <span class="hljs-number">1398</span>
+                                cljs.compiler<span class="hljs-variable">$compile_file</span>.invokeStatic     compiler.cljc: <span class="hljs-number">1376</span>
+                                      cljs.compiler<span class="hljs-variable">$compile_file</span>.invoke     compiler.cljc: <span class="hljs-number">1356</span>
+                                 cljs.closure/compile-file/invokeStatic       closure.clj:  <span class="hljs-number">432</span>
+                                              cljs.closure/compile-file       closure.clj:  <span class="hljs-number">423</span>
+                                               cljs.closure/<span class="hljs-built_in">eval</span>5411/fn       closure.clj:  <span class="hljs-number">499</span>
+                                             cljs.closure/<span class="hljs-built_in">eval</span>5347/fn/G       closure.clj:  <span class="hljs-number">389</span>
+                                               cljs.closure/<span class="hljs-built_in">eval</span>5417/fn       closure.clj:  <span class="hljs-number">508</span>
+                                             cljs.closure/<span class="hljs-built_in">eval</span>5347/fn/G       closure.clj:  <span class="hljs-number">389</span>
+                                   cljs.closure/compile-sources/iter/fn       closure.clj:  <span class="hljs-number">829</span>
+                                                                    ...
+                                         clojure.core/next/invokeStatic          core.clj:   <span class="hljs-number">64</span>
+                                        clojure.core/dorun/invokeStatic          core.clj: <span class="hljs-number">3033</span>
+                                        clojure.core/doall/invokeStatic          core.clj: <span class="hljs-number">3039</span>
+                                                     clojure.core/doall          core.clj: <span class="hljs-number">3039</span>
+                              cljs.closure/compile-sources/invokeStatic       closure.clj:  <span class="hljs-number">825</span>
+                                           cljs.closure/compile-sources       closure.clj:  <span class="hljs-number">814</span>
+                                        cljs.closure/build/invokeStatic       closure.clj: <span class="hljs-number">1945</span>
+                                                     cljs.closure/build       closure.clj: <span class="hljs-number">1883</span>
+                                      cljs.build.api/build/invokeStatic           api.clj:  <span class="hljs-number">199</span>
+                                                   cljs.build.api/build           api.clj:  <span class="hljs-number">187</span>
+                        adzerk.boot-cljs.impl/compile-cljs/invokeStatic          impl.clj:   <span class="hljs-number">89</span>
+                                     adzerk.boot-cljs.impl/compile-cljs          impl.clj:   <span class="hljs-number">66</span>
+                                                                    ...
+                                        clojure.core/apply/invokeStatic          core.clj:  <span class="hljs-number">646</span>
+                                                     clojure.core/apply          core.clj:  <span class="hljs-number">641</span>
+                                                  boot.pod/<span class="hljs-built_in">eval</span>-fn-call           pod.clj:  <span class="hljs-number">328</span>
+                                                      boot.pod/call-in*           pod.clj:  <span class="hljs-number">379</span>
+                                                                    ...
+                                                      boot.pod/call-in*           pod.clj:  <span class="hljs-number">382</span>
+                                  adzerk.boot-cljs/compile/invokeStatic     boot_cljs.clj:   <span class="hljs-number">71</span>
+                                               adzerk.boot-cljs/compile     boot_cljs.clj:   <span class="hljs-number">59</span>
+                                          adzerk.boot-cljs/compile-<span class="hljs-number">1</span>/fn     boot_cljs.clj:  <span class="hljs-number">126</span>
+                                    clojure.core/binding-conveyor-fn/fn          core.clj: <span class="hljs-number">1938</span>
+                                                                    ...
+Elapsed time: <span class="hljs-number">0.289</span> sec</pre><p>While this is not a very nice message it sure tells you that you have a problem. But this gets better. If you look at your browser window there is something there for you too:</p><figure><img class="img-responsive" src="images/error-message.png" alt="Screenshot with a cljs error message"><figcaption>Screenshot with a cljs error message</figcaption></figure><p>The important part of the error displayed on the terminal shows at your browser too.</p><p>The error is <code style="white-space: normal;">ERROR: EOF while reading, starting at line 3 and column 1 at file hoplon/app_pages/_index_DOT_html.cljs, line 9, column 1</code>. An <code>EOF</code> usually means that the file ended but the form was incomplete. So you probably have an open parenthesis without a closing one. <code style="white-space: normal;">starting at line 3 and column 1</code> is the location of the open parenthesis that was not closed.</p><p>Wait a minute. We didn't close the parenthesis from the <code>(h1</code> form. Well, the reader has no way to know that. The parentheses are closed in the order reversed, so the last opened one is closed first. In the end there is one parenthesis that was not closed and that parenthesis was opened on line 3, column 1.</p></div></div></div><script type="text/javascript" src="error-recovery.html.js"></script></body></html>
